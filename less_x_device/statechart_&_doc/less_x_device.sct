@@ -1,0 +1,34 @@
+/** LESS-X  ESP32 based Device */
+
+interface:
+// Events
+in event evAlertDetected
+
+// Actions
+operation opCheckAlert(void:void): boolean
+operation opEnterMode(Mode:integer)
+operation opMeasure(MeasureMode:integer)
+operation opSendMessage(void:void)
+operation opGetOtaConfigs(void:void)
+
+//Constants
+
+// Modes of operation
+const MODE_FULL_ACTIVE: integer = 0
+const MODE_MINIMAL_ACTIVE: integer = 1
+const MODE_DEEP_SLEEP: integer = 2
+
+// Measure Modes
+const MEASURE_MODE_ALERT: integer = 0
+const MEASURE_MODE_FULL: integer = 1
+
+//Configurable Params
+const CONF_TICKS_TO_MEASURE: integer = 5
+const CONF_MSGS_TO_GET_OTA_CONFIGS: integer = 3
+const CONF_DEEP_SLEEP_TIME: integer = 50
+
+// Internal vars
+internal:
+var viMessageCounter: integer
+var viTickCounter: integer
+var viFirstBoot: boolean
