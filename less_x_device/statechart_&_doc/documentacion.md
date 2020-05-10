@@ -14,7 +14,9 @@
 6) El equipo debe poder auto-checkearse e informar de fallas al usuario.
 
 ### Descripcion de funcionamiento
-Al encender el equipo por primera vez (estadp **FIRST BOOT**) el equipo va a llevar a cabo una serie de auto-verificaciones, en caso de encontrar fallas lo reportara al usuario.
+
+Al encender el equipo por primera vez (estado **FIRST BOOT**) el equipo va a llevar a cabo una serie de auto-verificaciones, en caso de encontrar fallas lo reportara al usuario.
+
 Luego pasara al estado **MEASURE** en donde se preparara para realizar las actividades de medicion y envio de mensajes entrando en el modo de operacion **opEnterMode(MODE_FULL_ACIVE)** y realizando las mediciones con **opMeasure(MEASURE_MODE_FULL)**. Luego se procedera al envio del mensage con la informacion recolectada (estado **SEND_MESSAGE**). Por ser el primer boot del equipo (**viFirstBoot = true**), se pasara direcamente al pedido de configuraciones (estado **OTA CONFIG**) para luego entrar al ciclo **SLEEP**/**TICK**.
 
 Una vez en el estado **SLEEP** el equipo entrara al modo de sueño profundo **opEnterMode(MODE_DEEP_SLEEP)** por el tiempo que haya configurado el usuario almacenado en **CONF_DEEP_SLEEP_TIME**. Una vez cumplido ese tiempo se pasara al estado **TICK** en donde se usara un modo de consumo minimo que permita checkear condiciones de posibles alertas **opEnterMode(MODE_MINIMAL_ACTIVE)**.
