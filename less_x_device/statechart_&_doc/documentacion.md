@@ -15,19 +15,18 @@
 
 ### Descripcion de funcionamiento
 
-Al encender el equipo por primera vez (estado **FIRST BOOT**) el equipo va a llevar a cabo una serie de auto-verificaciones, en caso de encontrar fallas lo reportara al usuario.
+#### Descripción de la máquina de estados principal
 
-Luego pasara al estado **MEASURE** en donde se preparara para realizar las actividades de medicion y envio de mensajes entrando en el modo de operacion **opEnterMode(MODE_FULL_ACIVE)** y realizando las mediciones con **opMeasure(MEASURE_MODE_FULL)**. Luego se procedera al envio del mensage con la informacion recolectada (estado **SEND_MESSAGE**). Por ser el primer boot del equipo (**viFirstBoot = true**), se pasara direcamente al pedido de configuraciones (estado **OTA CONFIG**) para luego entrar al ciclo **SLEEP**/**TICK**.
+Al encender el equipo por primera vez (estado **FIRST BOOT**) el equipo va a llevar a cabo una serie de auto-verificaciones, en caso de encontrar fallas lo reportará al usuario.
+Luego pasará al estado **MEASURE** en donde se preparara para realizar las actividades de medición y envío de mensajes entrando en el modo de operación opEnterMode(**MODE_FULL_ACTIVE**) y realizando las mediciones con opMeasure(**MEASURE_MODE_FULL**). 
+Luego se procedera al envio del mensaje con la información recolectada (estado **SEND_MESSAGE**). Por ser el primer boot del equipo (**viFirstBoot** = true), se pasará directamente al pedido de configuraciones (estado **OTA CONFIG**) para luego entrar al ciclo **SLEEP/TICK**.
 
-Una vez en el estado **SLEEP** el equipo entrara al modo de sueño profundo **opEnterMode(MODE_DEEP_SLEEP)** por el tiempo que haya configurado el usuario almacenado en **CONF_DEEP_SLEEP_TIME**. Una vez cumplido ese tiempo se pasara al estado **TICK** en donde se usara un modo de consumo minimo que permita checkear condiciones de posibles alertas **opEnterMode(MODE_MINIMAL_ACTIVE)**.
+Una vez en el estado SLEEP el equipo entrará al modo de sueño profundo opEnterMode(**MODE_DEEP_SLEEP**) por el tiempo que haya configurado el usuario almacenado en **CONF_DEEP_SLEEP_TIME**. Una vez cumplido ese tiempo se pasará al estado TICK en donde se usará un modo de consumo mínimo que permita verificar condiciones de posibles alertas opEnterMode(**MODE_MINIMAL_ACTIVE**).
+Una vez en el estado **TICK** se pasará al estado **MEASUR**E o se regresará al estado **SLEEP**.
+Para que se realice lo primero la cantidad de "ticks" contados deberá coincidir con **CONF_TICKS_TO_MEASURE** seteados por el usuario o bien haberse detectado un evento de alerta **evAlertDetected**.
+En caso de no cumplirse ninguna de las condiciones anteriormente mencionadas se regresará al estado **SLEEP**.
+Cada vez que se salga del estado **SEND MESSAGE** se verificará si la cantidad de mensajes enviados coincide con la seteada por el usuario **CONF_MSGS_TO_GET_OTA_CONFIGS**. En caso de ser así se pedirá un nuevo string de configuraciones a la nube **opGetOtaConfigs**. Esta operacion debera verificar que los valores obtenidos son validos y deberá guardarlos en memoria RTC para no ser perdidos durante el modo **MODE_DEEP_SLEEP**.
 
-Una vez en el estado **TICK** se pasara al estado **MEASURE** o se regresara al estado **SLEEP**.
-
-Para que se realice lo primero la cantidad de *"ticks"* contados debera coincidir con **CONF_TICKS_TO_MEASURE** seteados por el usuario o bien haberse detectado un evento de alerta **evAlertDetected**.
-
-En caso de no cumplirse ninguna de las condiciones anteriormente mencionadas se regresara al espado **SLEEP**.
-
-Cada vez que se salga del estado **SEND MESSAGE** se verificara si la cantidad de mensajes enviados coincide con la seteada por el usuario **CONF_MSGS_TO_GET_OTA_CONFIGS**. En caso de ser así se pedirá un nuevo string de configuraciones a la nube **opGetOtaConfigs**. Esta operacion debera chechear que los valores obtenidos son validos y debera guardarlos en memoria RTC para no ser perdidos durante el modo **MODE_DEEP_SLEEP**.
 
 ### Diagrama de estados
 ![](https://i.imgur.com/FS2Cf2e.png)
